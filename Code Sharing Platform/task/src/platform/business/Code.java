@@ -2,7 +2,17 @@ package platform.business;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "codestorage")
 public class Code {
+
+    @Id
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private int id;
 
     String code;
 
@@ -10,7 +20,6 @@ public class Code {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String title;
-
 
     public Code() {
     }
@@ -43,5 +52,13 @@ public class Code {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }
