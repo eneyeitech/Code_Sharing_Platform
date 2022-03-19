@@ -6,6 +6,8 @@ public class Code {
 
     String code;
 
+    String date;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String title;
 
@@ -13,9 +15,10 @@ public class Code {
     public Code() {
     }
 
-    public Code(String title, String code) {
+    public Code(String title, String code, String date) {
         this.title = title;
         this.code = code;
+        this.date = date;
     }
 
     public String getCode() {
@@ -32,5 +35,13 @@ public class Code {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
