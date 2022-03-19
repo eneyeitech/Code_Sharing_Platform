@@ -60,60 +60,6 @@ files:
     management.endpoints.web.exposure.include=*
     management.endpoint.shutdown.enabled=true
   learner_created: false
-- name: src/platform/CodeController.java
-  visible: true
-  text: |
-    package platform;
-
-    import org.springframework.http.HttpStatus;
-    import org.springframework.http.MediaType;
-    import org.springframework.http.ResponseEntity;
-    import org.springframework.stereotype.Controller;
-    import org.springframework.ui.Model;
-    import org.springframework.web.bind.annotation.GetMapping;
-    import org.springframework.web.bind.annotation.RestController;
-
-    import java.util.Map;
-
-    @RestController
-    public class CodeController {
-
-        @GetMapping("/api/code")
-        public Object getCodeJSON() {
-            return new ResponseEntity<>(Map.of("code","public static void main(String[] args) {\\n\" +\n" +
-                    "                \"    SpringApplication.run(CodeSharingPlatform.class, args);\\n\" +\n" +
-                    "                \"}"), HttpStatus.ACCEPTED);
-        }
-
-        @GetMapping(value = "/code", produces = MediaType.TEXT_HTML_VALUE)
-        public String getCodeHTML() {
-           return String.format("" +
-                   "<html>\n" +
-                   "<head>\n" +
-                   "    <title>Code</title>\n" +
-                   "</head>\n" +
-                   "<body>\n" +
-                   "    <pre>\n" +
-                   "public static void main(String[] args) {\n" +
-                   "    SpringApplication.run(CodeSharingPlatform.class, args);\n" +
-                   "}</pre>\n" +
-                   "</body>\n" +
-                   "</html>");
-        }
-    }
-  learner_created: false
-- name: src/resources/templates/code.ftlh
-  visible: true
-  text: |-
-    <html>
-    <head>
-        <title>Code</title>
-    </head>
-    <body>
-        <pre>${code}</pre>
-    </body>
-    </html>
-  learner_created: false
 - name: test/CodeSharingPlatformTest.java
   visible: false
   text: |
@@ -477,6 +423,81 @@ files:
         }
     }
   learner_created: false
+- name: src/platform/business/Code.java
+  visible: true
+  text: |-
+    package platform.business;
+
+    import com.fasterxml.jackson.annotation.JsonProperty;
+
+    public class Code {
+
+        String code;
+
+        String date;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        String title;
+
+
+        public Code() {
+        }
+
+        public Code(String title, String code, String date) {
+            this.title = title;
+            this.code = code;
+            this.date = date;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+    }
+  learner_created: true
+- name: src/platform/util/Util.java
+  visible: true
+  learner_created: true
+- name: src/platform/controller/ApiController.java
+  visible: true
+  learner_created: true
+- name: src/platform/controller/HtmlController.java
+  visible: true
+  learner_created: true
+- name: src/platform/repository/Repository.java
+  visible: true
+  learner_created: true
+- name: src/resources/templates/code.html
+  visible: true
+  learner_created: true
+- name: src/resources/templates/lastcodes.html
+  visible: true
+  learner_created: true
+- name: src/resources/templates/newcode.html
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/11029#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Sat, 19 Mar 2022 20:35:12 UTC
 record: -1
