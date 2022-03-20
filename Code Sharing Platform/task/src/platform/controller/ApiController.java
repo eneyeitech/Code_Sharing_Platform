@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import platform.business.Code;
 import platform.business.CodeService;
-import platform.util.Util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @RestController
 public class ApiController {
@@ -23,19 +21,25 @@ public class ApiController {
     }
 
     @GetMapping(path = "/api/code/{id}", produces = "application/json;charset=UTF-8")
-    public Code getApiCode(@PathVariable("id") int id) {
+    public Code getApiCode(@PathVariable("id") String id) {
+        Code responseCode = service.getCodeFromStorage(id);
+
+        if (responseCode.isViewLimit()) {
+            service.updateViewById(id);
+        }
+        if (responseCode.isTimeLimit()) {
+//            LocalDateTime currentTime = LocalDateTime.now();
+//            service.updateLocalTimeById(id, currentTime);
+            long currentSecond = System.currentTimeMillis();
+            service.updateTimeById(id, currentSecond);
+
+        }
         return service.getCodeFromStorage(id);
     }
 
     @GetMapping(path = "/api/code/latest", produces = "application/json;charset=UTF-8")
     public Object[] getApiLatestCode() {
-        List<Code> responseCode = new ArrayList<>();
-
-        for (int i = service.lastIdRepository(); i >= service.outputLimitId(); i--) {
-            Code eachCode = service.getCodeFromStorage(i);
-            responseCode.add(eachCode);
-        }
-        return responseCode.toArray();
+        return service.getLastCode().toArray();
     }
 
 
@@ -44,7 +48,14 @@ public class ApiController {
         Code responseCode = new Code();
         responseCode.setCode(newCode.getCode());
         responseCode.setTitle("Code");
-        responseCode.setDate(Util.getCurrentDateTime());
+//        responseCode.setId(Util.getNewUUID());
+        responseCode.setTime(newCode.getTime());
+        responseCode.setStartSeconds(System.currentTimeMillis());
+        responseCode.setStartTime(LocalDateTime.now());
+        System.out.println(responseCode.getStartSeconds());
+        responseCode.setViews(newCode.getViews());
+        responseCode.setViewLimit(newCode.getViews() > 0);
+        responseCode.setTimeLimit(newCode.getTime() > 0);
         service.addCodeToStorage(responseCode);
         String response = "{ \"id\" : \"" + responseCode.getId() + "\" }";
         return response;

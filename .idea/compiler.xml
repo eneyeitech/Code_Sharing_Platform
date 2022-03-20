@@ -12,4 +12,9 @@
       <module name="Code_Sharing_Platform.util.main" target="11" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Code_Sharing_Platform.Code_Sharing_Platform-task.main" options="--add-modules java.base" />
+    </option>
+  </component>
 </project>
